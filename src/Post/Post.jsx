@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Link, useParams } from "react-router-dom";
 
-function App() {
+function Post() {
+  let {post_id} = useParams()
   const [urls, setUrls] = useState([
     {id: 1, comment: "Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol ", username: "James Strawhead", time: 1697851928864, likes: 15},
     {id: 1, comment: "Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol ", username: "James Strawhead", time: 1697851928864, likes: 15},
@@ -64,7 +63,6 @@ function App() {
   const comments = urls.map(comment => (
     <div key={comment.id} className='comments-container'>
         <p className='comment-timestamp'>14m</p>
-
         <p className='comment-author'>{comment.username}</p>
         <p className='comment-content'>{comment.comment}</p>
     </div>
@@ -75,28 +73,25 @@ function App() {
       <div className='container-parent slide-view'>
         <div className='action-bar'>
           <div className='to-the-right'>
-            <div className='profile'>
-              <img src={"https://twittyr.com/res/usr/j.png"}></img>
-            </div>
+
+            <Link to={`/user/${10}`}>
+              <div className='profile'>
+                <img src={"https://twittyr.com/res/usr/j.png"}></img>
+              </div>
+            </Link>
+            
+            
             <button className='circle-button scribble-button'>
               scribble
             </button>
           </div>
 
-
-          {/* <div className='to-the-right right-view'>
-            <button className='circle-button scribble-button sign-up'>
-              sign up
-            </button>
-            <button className='circle-button scribble-button sign-in'>
-              sign in
-            </button>
-          </div> */}
-
           <div className='to-the-left left-view'>
-            <div className='back-button back-view'>
-              <img src={"../public/back.png"}></img>
-            </div>
+            <Link to={'..'}>
+              <div className='back-button back-view'>
+                <img src="/back.png"></img>
+              </div>
+            </Link>
             <div className='title-post-container'>
               <p className='title-post'>{drawing.title}</p>
             </div>
@@ -119,8 +114,9 @@ function App() {
 
         <div className='comment-box'>
           <div className='back-button send-comment'>
-            <img src={"../public/send.png"}></img>
+            <img src="/send.png"></img>
           </div>
+          
 
           <input className='comment-input' placeholder="Comment" type="text" id="comment" name="comment" />
           
@@ -135,4 +131,4 @@ function App() {
   )
 }
 
-export default App
+export default Post

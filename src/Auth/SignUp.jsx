@@ -75,7 +75,7 @@ function SignUp() {
     <>
       <div className='container-parent'>
       <Link to="/">
-        <img className='landing sign-landing' src='../public/landing.png'></img>
+        <img className='landing sign-landing' src='/landing.png'></img>
         </Link>
         <div className='sign-box'>
 

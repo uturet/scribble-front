@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"
 
 
 function SignIn() {
@@ -74,7 +74,7 @@ function SignIn() {
     <>
       <div className='container-parent'>
       <Link to="/">
-        <img className='landing sign-landing' src='../public/landing.png'></img>
+        <img className='landing sign-landing' src='/landing.png'></img>
         </Link>
         <div className='sign-box'>
 
