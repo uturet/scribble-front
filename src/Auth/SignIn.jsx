@@ -16,8 +16,8 @@ function SignIn() {
   return (
     <>
       <div className='container-parent'>
-      <Link to="/">
-        <img className='landing sign-landing' src='/landing.png'></img>
+        <Link to="/">
+          <img className='landing sign-landing' src='/landing.png'/>
         </Link>
         <div className='sign-box'>
 

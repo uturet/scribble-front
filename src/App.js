@@ -1,12 +1,12 @@
 import './App.css';
 import React, {useReducer} from 'react';
-import { BrowserRouter, Routes, Route, useParams,  } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useParams } from "react-router-dom";
 import Feed from './Feed/Feed'
 import SignIn from './Auth/SignIn';
 import SignUp from './Auth/SignUp';
 import Post from './Post/Post';
 import Profile from './Profile/Profile';
-import {AuthContext, registerUser} from './Auth/Api'
+import {AuthContext, registerUserApi} from './Auth/Api'
 
 export const initialUser = {
   id: null,
@@ -35,9 +35,9 @@ function App() {
     initialUser
   );
 
-  function loginUser(username, password) {
+  function registerUser(username, password) {
 
-    registerUser(username, password, dispatch)
+    registerUserApi(username, password, dispatch)
     
   }
 
@@ -46,8 +46,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Feed/>}/>
-          <Route path="/sign-up" element={<SignUp onLogin={loginUser}/>} />
-          <Route path="/sign-in" element={<SignIn onLogin={loginUser}/>} />
+          <Route path="/sign-up" element={<SignUp onLogin={registerUser}/>} />
+          <Route path="/sign-in" element={<SignIn onLogin={registerUser}/>} />
           <Route path="/post/:id" element={<Post/>} />
           <Route path="/user/:id" element={<Profile/>} />
         </Routes>

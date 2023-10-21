@@ -1,9 +1,8 @@
 import { createContext } from 'react';
 import axios from 'axios'
 
-
 export const AuthContext = createContext(null);
-export const registerUser = (username, password, dispatch) => {
+export const registerUserApi = (username, password, dispatch) => {
   axios({
     method: 'post',
     url: 'http://localhost:8000/user/register',
@@ -12,23 +11,29 @@ export const registerUser = (username, password, dispatch) => {
       password: password
     },
     headers: {
-      headers: {
         'Content-Type': 'application/json'
-      }}
+      }})
+  .then(function (response) {
+    loginUserApi(username, password, dispatch)
+  }).catch((e) => {
+    console.log(e)
+  })
+}
+
+export const loginUserApi = (username, password, dispatch) => {
+  axios.postForm(
+    'http://localhost:8000/auth/login',
+    {
+      username: username, 
+      password: password
     })
   .then(function (response) {
-    // handle success
-    // dispatch({
-    //   type: 'login',
-    //   data: data
-    // })
-    console.log(response);
-  })
-  .catch(function (error) {
-    // handle error
-    console.log(error);
-  })
-  .finally(function () {
-    // always executed
+    dispatch({
+      type: 'login',
+      data: response.data
+    })
+    window.location.href = window.location.origin;
+  }).catch((e) => {
+    console.log(e)
   })
 }

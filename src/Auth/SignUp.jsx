@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from "react-router-dom";
+import { Link, redirect } from "react-router-dom";
 
 
 function SignUp({onLogin}) {
@@ -39,6 +39,7 @@ function SignUp({onLogin}) {
                 onClick={(e) => {
                   e.preventDefault()
                   onLogin(username, password)
+                  redirect('/')
                 }}
                 type="submit" 
                 className="circle-button" 
