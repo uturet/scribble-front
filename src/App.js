@@ -30,6 +30,7 @@ function userReducer(user, action) {
 }
 
 function App() {
+  const [curPost, setCurPost] = useState(null)
   const [message, setMessage] = useState('')
   const [user, dispatch] = useReducer(
     userReducer,
@@ -48,10 +49,10 @@ function App() {
     <AuthContext.Provider value={user}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Feed/>}/>
+          <Route path="/" element={<Feed setCurPost={setCurPost}/>}/>
           <Route path="/sign-up" element={<SignUp onRegister={registerUser} message={message}/>} />
           <Route path="/sign-in" element={<SignIn onLogin={loginUser} message={message}/>} />
-          <Route path="/post/:id" element={<Post/>} />
+          <Route path="/post/:id" element={<Post curPost={curPost} />} />
           <Route path="/user/:id" element={<Profile/>} />
           <Route path="/post/create" element={<Canvas/>} />
         </Routes>

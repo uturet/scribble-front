@@ -1,89 +1,67 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useParams } from "react-router-dom";
+import {getComments, creaetComment} from './Api'
+const findTime = (d, time) => {
+  var currentTime = d.getTime() / 1000;
+  time = time / 1000;
 
-function Post() {
-  let {post_id} = useParams()
-  const [urls, setUrls] = useState([
-    {id: 1, comment: "Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol ", username: "James Strawhead", time: 1697851928864, likes: 15},
-    {id: 1, comment: "Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol ", username: "James Strawhead", time: 1697851928864, likes: 15},
-    {id: 1, comment: "Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol ", username: "James Strawhead", time: 1697851928864, likes: 15},
-    {id: 1, comment: "Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol ", username: "James Strawhead", time: 1697851928864, likes: 15},
-    {id: 1, comment: "Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol ", username: "James Strawhead", time: 1697851928864, likes: 15}
-    
-  ]);
+  var timeYear = Math.floor((currentTime - time)/60/60/24/7/52);
+  var timeMonth = Math.floor((currentTime - time)/60/60/24/30);
+  var timeWeek = Math.floor((currentTime - time)/60/60/24/7);
   
-  const [drawing, setDrawing] = useState(
-    {
-      id: 1, 
-      title: "Kayaking is tons of fun lol", 
-      author: "James Strawhead", 
-      time: 1697851928864, 
-      data: [
-        {
-          canvas: 'https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fktoo%2F2013%2F09%2F090513TB_Kayaks.jpg&f=1&nofb=1&ipt=dbe0ce79a68ec8d81d7df20f708c8b1ffb25b1a64cdbda312dd4b6ae57266707&ipo=images', description: ''}, {canvas: 'https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fktoo%2F2013%2F09%2F090513TB_Kayaks.jpg&f=1&nofb=1&ipt=dbe0ce79a68ec8d81d7df20f708c8b1ffb25b1a64cdbda312dd4b6ae57266707&ipo=images', 
-          description: ''
-        }
-      ]
-    });
+  var timeDay = Math.floor((currentTime - time)/60/60/24);
+  var timeHour = Math.floor((currentTime - time)/60/60);
+  var timeMin = Math.floor((currentTime - time)/60);
+  var timeSec = Math.floor((currentTime - time));
+
+  var timeString = "";
+  if (timeSec < 60) {
+      timeString = timeSec + "s";
+  } else if (timeMin < 60) {
+      timeString = timeMin + "m";
+  } else if (timeHour < 24) {
+      timeString = timeHour + "h";
+  } else if (timeDay < 7) {
+      timeString = timeDay + "d";
+  } else if (timeDay < 30) {
+      timeString = timeWeek + "w";
+  } else {
+      timeString = "incorrect time";
+  }
+  
+  return timeString;
+};
+
+
+function Post({curPost}) {
+  const [comment, setComment] = useState('')
+  const [comments, setComments] = useState([])
   const [date, setDate] = useState(new Date());
 
-
-
-  const findTime = (d, time) => {
-    var currentTime = d.getTime() / 1000;
-    time = time / 1000;
-
-    var timeYear = Math.floor((currentTime - time)/60/60/24/7/52);
-    var timeMonth = Math.floor((currentTime - time)/60/60/24/30);
-    var timeWeek = Math.floor((currentTime - time)/60/60/24/7);
     
-    var timeDay = Math.floor((currentTime - time)/60/60/24);
-    var timeHour = Math.floor((currentTime - time)/60/60);
-    var timeMin = Math.floor((currentTime - time)/60);
-    var timeSec = Math.floor((currentTime - time));
 
-    var timeString = "";
-    if (timeSec < 60) {
-        timeString = timeSec + "s";
-    } else if (timeMin < 60) {
-        timeString = timeMin + "m";
-    } else if (timeHour < 24) {
-        timeString = timeHour + "h";
-    } else if (timeDay < 7) {
-        timeString = timeDay + "d";
-    } else if (timeDay < 30) {
-        timeString = timeWeek + "w";
-    } else {
-        timeString = "incorrect time";
-    }
-    
-    return timeString;
-  };
+  useEffect(() => {
+    getComments(curPost.id, setComments)
+  }, [])
 
-  const comments = urls.map(comment => (
-    <div key={comment.id} className='comments-container'>
-        <p className='comment-timestamp'>14m</p>
-        <p className='comment-author'>{comment.username}</p>
-        <p className='comment-content'>{comment.comment}</p>
-    </div>
-  ));
+  if (!curPost) {
+    window.location.href = window.location.origin;
+    return (
+      <div></div>
+    )
+  }
 
   return (
     <>
       <div className='container-parent slide-view'>
         <div className='action-bar'>
           <div className='to-the-right'>
-
-            <Link to={`/user/${10}`}>
-              <div className='profile'>
-                <img src={"https://twittyr.com/res/usr/j.png"}></img>
-              </div>
-            </Link>
             
-            
+            <Link to="/post/create">
             <button className='circle-button scribble-button'>
               scribble
             </button>
+            </Link>
           </div>
 
           <div className='to-the-left left-view'>
@@ -93,13 +71,13 @@ function Post() {
               </div>
             </Link>
             <div className='title-post-container'>
-              <p className='title-post'>{drawing.title}</p>
+              <p className='title-post'>{curPost.title}</p>
             </div>
           </div>
         </div>
 
         <div className='view-container'>
-          <img src='https://media-cldnry.s-nbcnews.com/image/upload/rockcms/2023-03/puppy-dog-mc-230321-03-b700d4.jpg'></img>
+          <img src={"/" + curPost.img}></img>
         </div>
 
         <div className='post-footer info-view'>
@@ -107,24 +85,35 @@ function Post() {
             <img src='https://twittyr.com/res/ast/like.svg'></img>
           </div>
           <div className='post-footer-info'>
-            <p className='post-title'>{drawing.title}</p>
-            <p className='post-info post-info-view'>{drawing.author} · {findTime(date, drawing.time)}</p>
+            <p className='post-title'>{curPost.title}</p>
+            <p className='post-info post-info-view'>{curPost ? curPost.owner.username : null} · {findTime(date, curPost.created_at)}</p>
           </div>
         </div>
 
-        <div className='comment-box'>
-          <div className='back-button send-comment'>
+        <div className='comment-box flex'>
+          <input 
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            className='comment-input' placeholder="Comment" type="text" id="comment" name="comment" />
+          <div
+            onClick={(e) => {
+              creaetComment(curPost.id, comment, setComments, setComment)
+            }} 
+            className='back-button send-comment'>
             <img src="/send.png"></img>
           </div>
-          
-
-          <input className='comment-input' placeholder="Comment" type="text" id="comment" name="comment" />
           
         </div>
 
         <div className='posts-container'>
 
-          {comments}
+          {comments.map(comment => (
+            <div key={comment.id} className='comments-container'>
+                <p className='comment-timestamp'>14m</p>
+                <p className='comment-author'>{comment.owner}</p>
+                <p className='comment-content'>{comment.content}</p>
+            </div>
+          ))}
         </div>
       </div>
     </>

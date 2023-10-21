@@ -35,7 +35,7 @@ const findTime = (d, time) => {
 };
 
 
-function Feed() {
+function Feed({setCurPost}) {
   const user = useContext(AuthContext);
   const [page, setPage] = useState(0)
   const [buttons, setButtons] = useState(null)
@@ -44,10 +44,11 @@ function Feed() {
 
   useEffect(() => {
     getFeed(page, setUrls, setPage)
+    console.log(urls[0])
   }, [])
 
   const posts = urls.map((post, i) => (
-    <Link key={`${post.id}  ${i}`} to={`/post/${post.id}`}>
+    <Link onClick={() => setCurPost(post)} key={`${post.id}  ${i}`} to={`/post/${post.id}`}>
     <div className='post-parent'>
       <div>
         <img className='post-image' src={"/" + post.img} alt='' />
@@ -58,7 +59,7 @@ function Feed() {
         </div>
         <div className='post-footer-info'>
           <p className='post-title'>{post.title}</p>
-          <p className='post-info'>{post.author} · {findTime(date, post.time)}</p>
+          <p className='post-info'>{post.owner.username} · {findTime(date, post.created_at)}</p>
         </div>
       </div>
     </div>
@@ -79,9 +80,6 @@ function Feed() {
   </div>)
 
   const newPost = (<div>
-    <div className='profile'>
-      <img src={user.iamge}></img>
-    </div>
     <Link to="/post/create">
       <span className='circle-button scribble-button'>
         New Post
