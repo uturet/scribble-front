@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Link } from "react-router-dom";
 import {AuthContext} from '../Auth/Api'
+import {getFeed} from './Api'
 
 const findTime = (d, time) => {
   var currentTime = d.getTime() / 1000;
@@ -36,21 +37,20 @@ const findTime = (d, time) => {
 
 function Feed() {
   const user = useContext(AuthContext);
+  const [page, setPage] = useState(0)
   const [buttons, setButtons] = useState(null)
-  console.log('U', user)
-  const [urls, setUrls] = useState([
-    {id: 10, title: "Kayaking is tons of fun lol", author: "James Strawhead", time: 1697851928864, data: [{canvas: 'https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fktoo%2F2013%2F09%2F090513TB_Kayaks.jpg&f=1&nofb=1&ipt=dbe0ce79a68ec8d81d7df20f708c8b1ffb25b1a64cdbda312dd4b6ae57266707&ipo=images', description: ''}, {canvas: 'https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fktoo%2F2013%2F09%2F090513TB_Kayaks.jpg&f=1&nofb=1&ipt=dbe0ce79a68ec8d81d7df20f708c8b1ffb25b1a64cdbda312dd4b6ae57266707&ipo=images', description: ''}]}, 
-    {id: 111, title: "Kayaking is tons of fun lol", author: "James Strawhead", time: 1697851928864, data: [{canvas: 'https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fktoo%2F2013%2F09%2F090513TB_Kayaks.jpg&f=1&nofb=1&ipt=dbe0ce79a68ec8d81d7df20f708c8b1ffb25b1a64cdbda312dd4b6ae57266707&ipo=images', description: ''}, {canvas: 'https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fktoo%2F2013%2F09%2F090513TB_Kayaks.jpg&f=1&nofb=1&ipt=dbe0ce79a68ec8d81d7df20f708c8b1ffb25b1a64cdbda312dd4b6ae57266707&ipo=images', description: ''}]}, 
-    {id: 145, title: "Kayaking is tons of fun lol", author: "James Strawhead", time: 1697851928864, data: [{canvas: 'https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fktoo%2F2013%2F09%2F090513TB_Kayaks.jpg&f=1&nofb=1&ipt=dbe0ce79a68ec8d81d7df20f708c8b1ffb25b1a64cdbda312dd4b6ae57266707&ipo=images', description: ''}, {canvas: 'https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fktoo%2F2013%2F09%2F090513TB_Kayaks.jpg&f=1&nofb=1&ipt=dbe0ce79a68ec8d81d7df20f708c8b1ffb25b1a64cdbda312dd4b6ae57266707&ipo=images', description: ''}]}, 
-    {id: 1003, title: "Kayaking is tons of fun lol", author: "James Strawhead", time: 1697851928864, data: [{canvas: 'https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fktoo%2F2013%2F09%2F090513TB_Kayaks.jpg&f=1&nofb=1&ipt=dbe0ce79a68ec8d81d7df20f708c8b1ffb25b1a64cdbda312dd4b6ae57266707&ipo=images', description: ''}, {canvas: 'https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fktoo%2F2013%2F09%2F090513TB_Kayaks.jpg&f=1&nofb=1&ipt=dbe0ce79a68ec8d81d7df20f708c8b1ffb25b1a64cdbda312dd4b6ae57266707&ipo=images', description: ''}]}
-  ]);
+  const [urls, setUrls] = useState([]);
   const [date, setDate] = useState(new Date());
 
-  const posts = urls.map(post => (
-    <Link to={`/post/${post.id}`}>
-    <div key={post.id} className='post-parent'>
+  useEffect(() => {
+    getFeed(page, setUrls, setPage)
+  }, [])
+
+  const posts = urls.map((post, i) => (
+    <Link key={`${post.id}  ${i}`} to={`/post/${post.id}`}>
+    <div className='post-parent'>
       <div>
-        <img className='post-image' src={post.data[0].canvas} alt={post.data[0].description} />
+        <img className='post-image' src={"/" + post.img} alt='' />
       </div>
       <div className='post-footer'>
         <div className='circle-button like-button'>
@@ -79,6 +79,9 @@ function Feed() {
   </div>)
 
   const newPost = (<div>
+    <div className='profile'>
+      <img src={user.iamge}></img>
+    </div>
     <Link to="/post/create">
       <span className='circle-button scribble-button'>
         New Post
@@ -93,7 +96,8 @@ function Feed() {
   return (
     <>
       <div className='container-parent'>
-        <img className='landing' src='/landing.png' alt=''/>
+
+        <img onClick={() => {getFeed(page, setUrls, setPage)}} className='landing' src='/landing.png' alt=''/>
 
         <div className='action-bar ${isStickyActive ? "active-box" : ""}'>
 
