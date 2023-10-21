@@ -1,17 +1,16 @@
-import React, { useState, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState, useContext } from 'react'
 import DrawingCanvas from './DrawingCanvas';
+import {uploadPost} from './Api'
 
 function Canvas() {
+  const [getImage, setGetImage] = useState(() => {})
+  const [title, setTitle] = useState('')
   const [urls, setUrls] = useState([
     {id: 1, comment: "Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol ", username: "James Strawhead", time: 1697851928864, likes: 15},
     {id: 1, comment: "Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol ", username: "James Strawhead", time: 1697851928864, likes: 15},
     {id: 1, comment: "Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol ", username: "James Strawhead", time: 1697851928864, likes: 15},
     {id: 1, comment: "Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol ", username: "James Strawhead", time: 1697851928864, likes: 15},
     {id: 1, comment: "Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol Kayaking is tons of fun lol ", username: "James Strawhead", time: 1697851928864, likes: 15}
-    
   ]);
   
   const [drawing, setDrawing] = useState(
@@ -28,12 +27,6 @@ function Canvas() {
       ]
     });
   const [date, setDate] = useState(new Date());
-  // const [strokeStyle, setStrokeStyle] = useState("black");
-
-  // const handleColorChange = (newColor) => {
-  //   setStrokeStyle(newColor);
-  // };
-
   const findTime = (d, time) => {
     var currentTime = d.getTime() / 1000;
     time = time / 1000;
@@ -66,7 +59,7 @@ function Canvas() {
   };
 
   const createPost = () => {
-    // THE CODE TO CREATE A POST WILL GO HERE!!!!!!
+    uploadPost(getImage(), title)
   }
 
   return (
@@ -76,27 +69,19 @@ function Canvas() {
         <div className='action-bar'>
             <div className='to-the-right'>
               <div onClick={createPost} className='back-button send-scribble'>
-                <img src={"../public/send.png"}></img>
+                <img src="/send.png"></img>
               </div>
             </div>
             
-
-
-            {/* <div className='to-the-right right-view'>
-              <button className='circle-button scribble-button sign-up'>
-                sign up
-              </button>
-              <button className='circle-button scribble-button sign-in'>
-                sign in
-              </button>
-            </div> */}
-
             <div className='to-the-left left-view canvas-back-btn'>
               <div className='back-button back-view'>
-                <img src={"../public/back.png"}></img>
+                <img src="/back.png"></img>
               </div>
             </div>
-            <input placeholder='title goes here' name='name-for-scribble' className='motivation'></input>
+            <input 
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder='title goes here' name='name-for-scribble' className='motivation'></input>
           </div>
 
         {/* Layers */}
@@ -104,33 +89,8 @@ function Canvas() {
 
         {/* CANVAS */}
         <div className='canvas-box'>
-          <DrawingCanvas></DrawingCanvas>
+          <DrawingCanvas setGetImage={setGetImage}/>
         </div>
-
-        {/* Editors */}
-        {/* <div className='pen-editor'>
-          <div className='colors'>
-            <div className='color black' onClick={() => handleColorChange('black')}></div>
-            <div className='color gray' onClick={() => handleColorChange('gray')}></div>
-            <div className='color white' onClick={() => handleColorChange('white')}></div>
-            <div className='color red' onClick={() => handleColorChange('red')}></div>
-            <div className='color orange' onClick={() => handleColorChange('orange')}></div>
-            <div className='color yellow' onClick={() => handleColorChange('yellow')}></div>
-            <div className='color green' onClick={() => handleColorChange('green')}></div>
-            <div className='color blue' onClick={() => handleColorChange('blue')}></div>
-            <div className='color indigo' onClick={() => handleColorChange('indigo')}></div>
-            <div className='color violet' onClick={() => handleColorChange('violet')}></div>
-          </div>
-        </div> */}
-
-          {/* <div>
-            <button onClick={clearCanvas} className='circle-button scribble-button scribble-tools'>
-              clear
-            </button>
-          </div> */}
-
-
-        {/* </div> */}
 
       </div>
     </>

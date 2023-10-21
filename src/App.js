@@ -7,6 +7,7 @@ import SignUp from './Auth/SignUp';
 import Post from './Post/Post';
 import Profile from './Profile/Profile';
 import {AuthContext, registerUserApi, loginUserApi, getUserDataApi} from './Auth/Api'
+import Canvas from './Canvas/Canvas';
 
 export const initialUser = {
   id: localStorage.getItem("auth-id"),
@@ -52,6 +53,7 @@ function App() {
           <Route path="/sign-in" element={<SignIn onLogin={loginUser} message={message}/>} />
           <Route path="/post/:id" element={<Post/>} />
           <Route path="/user/:id" element={<Profile/>} />
+          <Route path="/post/create" element={<Canvas/>} />
         </Routes>
       </BrowserRouter>
     </AuthContext.Provider>

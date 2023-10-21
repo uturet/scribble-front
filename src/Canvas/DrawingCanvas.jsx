@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 
-function DrawingCanvas() {
+function DrawingCanvas({setGetImage}) {
   const canvasRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [context, setContext] = useState(null);
@@ -21,7 +21,9 @@ function DrawingCanvas() {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
     const scaleFactor = window.devicePixelRatio;
-
+    setGetImage(() => () => {
+      return canvas.toDataURL("image/jpeg").split(';base64,')[1];
+    })
     // Set canvas size
     canvas.width = 600 * scaleFactor;
     canvas.height = 400 * scaleFactor;
@@ -137,10 +139,10 @@ function DrawingCanvas() {
 
         <div className='drawing-tools'>
             <div id="eraser" className={`circle-button ${currentTool === 'erase' ? 'selected' : ''}`} onClick={() => changeTool('erase')}>
-              <img src='../public/erase.png' alt='Eraser' />
+              <img src='/erase.png' alt='Eraser' />
             </div>
             <div id='brush' className={`circle-button ${currentTool === 'brush' ? 'selected' : ''}`} onClick={() => changeTool('brush')}>
-              <img src='../public/brush.png' alt='Brush' />
+              <img src='/brush.png' alt='Brush' />
             </div>
           </div>
         </div>

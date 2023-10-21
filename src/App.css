@@ -531,6 +531,110 @@ _________     _____    ___________   _________    _________        ________ ____
         */
 
 canvas {
-  border: 1px solid black;
   border-radius: 15px;
+
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
+
+.motivation {
+  width: 400px;
+  text-align: center;
+  display: block;
+  font-weight: 900;
+  font-size: 24px;
+  color: black;
+
+  margin: 0px auto;
+  padding: 0;
+
+  width: 350px;
+  display: block;
+  padding: 5px;
+  border-radius: 15px;
+  background-color: white;
+  border: 3px solid #ffa4d8;
+  outline: none;
+  color: black;
+}
+
+.motivation:focus {
+  border: 3px solid #756fbf;
+}
+
+.colors {
+  width: 600px;
+  margin: auto;
+}
+
+.color {
+  width: 40px;
+  height: 40px;
+  margin: 20px 10px;
+
+  cursor: pointer;
+  border-radius: 100000px;
+  display: inline-block;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.sribble-tools-box {
+  margin-top: 10px;
+  width: 100%;
+  height: 70px;
+}
+
+.scribble-tools {
+  float: left;
+  display: inline;
+  background-color: #756fbf;
+}
+
+.scribble-tools:hover {
+  background-color: #645ea7;
+}
+
+.drawing-tools {
+  float: right;
+  display: inline;
+}
+
+.drawing-tools .circle-button {
+  margin-left: 10px;
+  background-color: #ffa4d8;
+}
+
+.drawing-tools .circle-button:hover {
+  background-color: #f083c1;
+}
+
+.drawing-tools .selected {
+  background-color: #756fbf;
+}
+
+.drawing-tools .selected:hover {
+  background-color: #645ea7;
+}
+
+.send-scribble {
+  height: 50px;
+  width: 50px;
+
+  background: linear-gradient(to right,#c0954b,#e7bd74)
+}
+
+input[type=range] {
+  width: 40%;
+  display: block;
+  margin: -50px auto 20px auto;
+}
+
+.black { background-color: black; }
+.gray { background-color: gray; }
+.white { background-color: white; }
+.red { background-color: red; }
+.orange { background-color: orange; }
+.yellow { background-color: yellow; }
+.green { background-color: green; }
+.blue { background-color: blue; }
+.indigo { background-color: indigo; }
+.violet { background-color: violet; }
