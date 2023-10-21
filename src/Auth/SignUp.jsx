@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { Link, redirect } from "react-router-dom";
+import {AuthContext} from '../Auth/Api'
 
-
-function SignUp({onLogin}) {
+function SignUp({onRegister, message}) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+
 
   return (
     <>
@@ -14,7 +15,7 @@ function SignUp({onLogin}) {
         </Link>
         <div className='sign-box'>
 
-          <form action="signin.php" method="post">
+          <form action="/" method="post">
               <label for="username">Username:</label>
               <input 
                 value={username}
@@ -35,11 +36,11 @@ function SignUp({onLogin}) {
                 name="password" 
                 required/>
               
-              <input 
+              <input
+
                 onClick={(e) => {
+                  onRegister(username, password)
                   e.preventDefault()
-                  onLogin(username, password)
-                  redirect('/')
                 }}
                 type="submit" 
                 className="circle-button" 
@@ -49,6 +50,7 @@ function SignUp({onLogin}) {
           <Link to="/sign-in">
           <p className='fool'>already have an account?</p>
           </Link>
+          <p>{message}</p>
 
         </div>
       </div>

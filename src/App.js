@@ -1,18 +1,17 @@
 import './App.css';
-import React, {useReducer} from 'react';
+import React, {useReducer, useState} from 'react';
 import { BrowserRouter, Routes, Route, useParams } from "react-router-dom";
 import Feed from './Feed/Feed'
 import SignIn from './Auth/SignIn';
 import SignUp from './Auth/SignUp';
 import Post from './Post/Post';
 import Profile from './Profile/Profile';
-import {AuthContext, registerUserApi} from './Auth/Api'
+import {AuthContext, registerUserApi, loginUserApi, getUserDataApi} from './Auth/Api'
 
 export const initialUser = {
-  id: null,
-  username: null,
-  image: null,
-  token: null
+  id: localStorage.getItem("auth-id"),
+  username: localStorage.getItem("auth-username"),
+  image: localStorage.getItem("auth-image"),
 }
 
 function userReducer(user, action) {
@@ -30,15 +29,18 @@ function userReducer(user, action) {
 }
 
 function App() {
+  const [message, setMessage] = useState('')
   const [user, dispatch] = useReducer(
     userReducer,
     initialUser
   );
 
   function registerUser(username, password) {
+    registerUserApi(username, password, dispatch, setMessage)
+  }
 
-    registerUserApi(username, password, dispatch)
-    
+  function loginUser(username, password) {
+    loginUserApi(username, password, dispatch, setMessage)
   }
 
   return (
@@ -46,8 +48,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Feed/>}/>
-          <Route path="/sign-up" element={<SignUp onLogin={registerUser}/>} />
-          <Route path="/sign-in" element={<SignIn onLogin={registerUser}/>} />
+          <Route path="/sign-up" element={<SignUp onRegister={registerUser} message={message}/>} />
+          <Route path="/sign-in" element={<SignIn onLogin={loginUser} message={message}/>} />
           <Route path="/post/:id" element={<Post/>} />
           <Route path="/user/:id" element={<Profile/>} />
         </Routes>
